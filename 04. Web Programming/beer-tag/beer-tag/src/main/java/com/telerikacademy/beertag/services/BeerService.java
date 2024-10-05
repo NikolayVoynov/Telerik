@@ -5,7 +5,7 @@ import com.telerikacademy.beertag.models.Beer;
 import java.util.List;
 
 public interface BeerService {
-    List<Beer> getAllBeers();
+    List<Beer> getAllBeers(String name, Double minAbv, Double maxAbv, Integer styleId, String sortBy, String sortOrderType);
 
     Beer getBeerById(int id);
 

@@ -21,8 +21,8 @@ public class BeerServiceImpl implements BeerService {
 
 
     @Override
-    public List<Beer> getAllBeers() {
-        return beerRepository.getAllBeers();
+    public List<Beer> getAllBeers(String name, Double minAbv, Double maxAbv, Integer styleId, String sortBy, String sortOrderType) {
+        return beerRepository.getAllBeers(name, minAbv, maxAbv, styleId, sortBy, sortOrderType);
     }
 
 

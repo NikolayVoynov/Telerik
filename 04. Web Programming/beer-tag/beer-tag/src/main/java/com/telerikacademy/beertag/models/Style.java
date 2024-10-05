@@ -2,26 +2,19 @@ package com.telerikacademy.beertag.models;
 
 import java.util.Objects;
 
-public class Beer {
+public class Style {
 
     private int id;
 
     private String name;
 
-    private double abv;
-
-    private Style style;
-
-    public Beer() {
+    public Style() {
     }
 
-    public Beer(int id, String name, double abv, Style style) {
+    public Style(int id, String name) {
         this.id = id;
         this.name = name;
-        this.abv = abv;
-        this.style = style;
     }
-
 
     public int getId() {
         return id;
@@ -39,28 +32,12 @@ public class Beer {
         this.name = name;
     }
 
-    public double getAbv() {
-        return abv;
-    }
-
-    public void setAbv(double abv) {
-        this.abv = abv;
-    }
-
-    public Style getStyle() {
-        return style;
-    }
-
-    public void setStyle(Style style) {
-        this.style = style;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Beer beer = (Beer) o;
-        return id == beer.id;
+        Style style = (Style) o;
+        return id == style.id;
     }
 
     @Override

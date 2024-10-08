@@ -1,20 +1,30 @@
 package com.telerikacademy.beer.models;
 
+import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.Size;
 
+
+@Entity
+@Table(name = "beers")
 public class Beer {
 
-    @Positive(message = "Id should be positive")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "beer_id")
     private int id;
 
+    @Column(name = "name")
     @NotNull(message = "Name cannot be empty")
-    @Size(min = 2, max = 20, message = "Name should be between 2 and 20")
-
     private String name;
-    @Positive(message = "ABV should be positive")
+
+    @Column(name = "abv")
     private double abv;
+
+    @ManyToOne
+    @JoinColumn(name = "style_id")
+    private Style style;
 
     public Beer() {
     }
@@ -47,5 +57,13 @@ public class Beer {
 
     public void setAbv(double abv) {
         this.abv = abv;
+    }
+
+    public Style getStyle() {
+        return style;
+    }
+
+    public void setStyle(Style style) {
+        this.style = style;
     }
 }

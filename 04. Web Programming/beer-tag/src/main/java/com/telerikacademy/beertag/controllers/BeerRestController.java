@@ -7,6 +7,7 @@ import com.telerikacademy.beertag.helpers.AuthenticationHelper;
 import com.telerikacademy.beertag.helpers.BeerMapper;
 import com.telerikacademy.beertag.models.Beer;
 import com.telerikacademy.beertag.models.BeerDto;
+import com.telerikacademy.beertag.models.FilterOptions;
 import com.telerikacademy.beertag.models.User;
 import com.telerikacademy.beertag.services.BeerService;
 import jakarta.validation.Valid;
@@ -42,7 +43,8 @@ public class BeerRestController {
                                   @RequestParam(required = false) Integer styleId,
                                   @RequestParam(required = false) String sortBy,
                                   @RequestParam(required = false) String sortOrderType) {
-        return beerService.getAllBeers(name, minAbv, maxAbv, styleId, sortBy, sortOrderType);
+        FilterOptions filterOptions = new FilterOptions(name, minAbv, maxAbv, styleId, sortBy, sortOrderType);
+        return beerService.getAllBeers(filterOptions);
     }
 
     @GetMapping("/{id}")

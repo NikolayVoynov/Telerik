@@ -4,6 +4,7 @@ import com.telerikacademy.beertag.exceptions.EntityDuplicateException;
 import com.telerikacademy.beertag.exceptions.EntityNotFoundException;
 import com.telerikacademy.beertag.exceptions.AuthorizationException;
 import com.telerikacademy.beertag.models.Beer;
+import com.telerikacademy.beertag.models.FilterOptions;
 import com.telerikacademy.beertag.models.User;
 import com.telerikacademy.beertag.repositories.BeerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +26,8 @@ public class BeerServiceImpl implements BeerService {
 
 
     @Override
-    public List<Beer> getAllBeers(String name, Double minAbv, Double maxAbv, Integer styleId, String sortBy, String sortOrderType) {
-        return beerRepository.getAllBeers(name, minAbv, maxAbv, styleId, sortBy, sortOrderType);
+    public List<Beer> getAllBeers(FilterOptions filterOptions) {
+        return beerRepository.getAllBeers(filterOptions);
     }
 
 

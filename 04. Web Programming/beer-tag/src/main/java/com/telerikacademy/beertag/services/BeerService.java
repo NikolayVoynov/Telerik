@@ -1,12 +1,13 @@
 package com.telerikacademy.beertag.services;
 
 import com.telerikacademy.beertag.models.Beer;
+import com.telerikacademy.beertag.models.FilterOptions;
 import com.telerikacademy.beertag.models.User;
 
 import java.util.List;
 
 public interface BeerService {
-    List<Beer> getAllBeers(String name, Double minAbv, Double maxAbv, Integer styleId, String sortBy, String sortOrderType);
+    List<Beer> getAllBeers(FilterOptions filterOptions);
 
     Beer getBeerById(int id);
 

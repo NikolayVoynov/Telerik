@@ -1,11 +1,12 @@
 package com.telerikacademy.beertag.repositories;
 
 import com.telerikacademy.beertag.models.Beer;
+import com.telerikacademy.beertag.models.FilterOptions;
 
 import java.util.List;
 
 public interface BeerRepository {
-    List<Beer> getAllBeers(String name, Double minAbv, Double maxAbv, Integer styleId, String sortBy, String sortOrderType);
+    List<Beer> getAllBeers(FilterOptions filterOptions);
 
     Beer getBeerById(int id);
 

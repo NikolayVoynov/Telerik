@@ -2,6 +2,7 @@ package com.telerikacademy.beertag.repositories;
 
 import com.telerikacademy.beertag.exceptions.EntityNotFoundException;
 import com.telerikacademy.beertag.models.Beer;
+import com.telerikacademy.beertag.models.FilterOptions;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -9,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 @Repository
 public class BeerRepositoryImpl implements BeerRepository {
@@ -22,33 +22,58 @@ public class BeerRepositoryImpl implements BeerRepository {
     }
 
     @Override
-    public List<Beer> getAllBeers(String name, Double minAbv, Double maxAbv, Integer styleId, String sortBy, String sortOrderType) {
-//        List<Beer> resultBeers = new ArrayList<>();
-//
-//        resultBeers = filterByName(resultBeers, name);
-//        resultBeers = filterByAbv(resultBeers, minAbv, maxAbv);
-//        resultBeers = filterByStyle(resultBeers, styleId);
-//        resultBeers = sortBy(resultBeers, sortBy);
-//        resultBeers = sortOrderType(resultBeers, sortOrderType);
-//
-//        return resultBeers;
-        return null;
+    public List<Beer> getAllBeers(FilterOptions filterOptions) {
+        try (Session session = sessionFactory.openSession()) {
+
+            List<String> filters = new ArrayList<>();
+            Map<String, Object> params = new HashMap<>();
+
+            filterOptions.getName().ifPresent(value -> {
+                filters.add("name like :name");
+                params.put("name", String.format("%%%s%%", value));
+            });
+
+            filterOptions.getMinAbv().ifPresent(value -> {
+                filters.add("abv >= :minAbv");
+                params.put("minAbv", value);
+            });
+
+            filterOptions.getMaxAbv().ifPresent(value -> {
+                filters.add("abv <= :maxAbv");
+                params.put("maxAbv", value);
+            });
+
+            filterOptions.getStyleId().ifPresent(value -> {
+                filters.add("style.id = :styleId");
+                params.put("styleId", value);
+            });
+
+            StringBuilder resultQuery = new StringBuilder();
+            resultQuery.append("from Beer");
+            if (!filters.isEmpty()) {
+                resultQuery.append(" where ")
+                        .append(String.join(" and ", filters));
+            }
+
+            resultQuery.append(generateOrderByQuery(filterOptions));
+
+            Query<Beer> query = session.createQuery(resultQuery.toString(), Beer.class);
+            query.setProperties(params);
+
+            return query.list();
+        }
     }
+
 
 
     @Override
     public Beer getBeerById(int id) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Beer> query = session.createQuery("from Beer where id = :id", Beer.class);
-            query.setParameter("id", id);
-
-            List<Beer> beers = query.list();
-
-            if (beers.isEmpty()) {
+            Beer beer = session.get(Beer.class, id);
+            if (beer == null) {
                 throw new EntityNotFoundException("Beer", id);
             }
-
-            return beers.get(0);
+            return beer;
         }
     }
 
@@ -70,7 +95,7 @@ public class BeerRepositoryImpl implements BeerRepository {
 
     @Override
     public void createNewBeer(Beer beer) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.persist(beer);
             session.getTransaction().commit();
@@ -79,7 +104,7 @@ public class BeerRepositoryImpl implements BeerRepository {
 
     @Override
     public void updateBeer(Beer beer) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.merge(beer);
             session.getTransaction().commit();
@@ -88,82 +113,39 @@ public class BeerRepositoryImpl implements BeerRepository {
 
     @Override
     public void deleteBeer(int id) {
-        try(Session session = sessionFactory.openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             session.beginTransaction();
             session.remove(getBeerById(id));
             session.getTransaction().commit();
         }
     }
 
-//    private static List<Beer> filterByName(List<Beer> resultBeers, String name) {
-//        if (name != null && !name.isEmpty()) {
-//            resultBeers = resultBeers
-//                    .stream()
-//                    .filter(beer -> checkContainsIgnoredCase(beer.getName(), name))
-//                    .collect(Collectors.toList());
-//        }
-//
-//        return resultBeers;
-//    }
+    private String generateOrderByQuery(FilterOptions filterOptions) {
+        if (filterOptions.getSortBy().isEmpty()) {
+            return "";
+        }
 
-//    private static List<Beer> filterByAbv(List<Beer> resultBeers, Double minAbv, Double maxAbv) {
-//        if (maxAbv != null) {
-//            resultBeers = resultBeers
-//                    .stream()
-//                    .filter(beer -> beer.getAbv() <= maxAbv)
-//                    .collect(Collectors.toList());
-//        }
-//
-//        if (minAbv != null) {
-//            resultBeers = resultBeers
-//                    .stream()
-//                    .filter(beer -> beer.getAbv() >= minAbv)
-//                    .collect(Collectors.toList());
-//        }
-//
-//        return resultBeers;
-//    }
+        String orderByQuery = "";
 
-//    private static List<Beer> filterByStyle(List<Beer> resultBeers, Integer styleId) {
-//        if (styleId != null) {
-//            resultBeers = resultBeers
-//                    .stream()
-//                    .filter(beer -> beer.getStyle().getId() == styleId)
-//                    .collect(Collectors.toList());
-//        }
-//
-//        return resultBeers;
-//    }
+        switch (filterOptions.getSortBy().get()) {
+            case "name":
+                orderByQuery = "name";
+                break;
+            case "abv":
+                orderByQuery = "abv";
+                break;
+            case "style":
+                orderByQuery = "style.name";
+                break;
+        }
 
-//    private static List<Beer> sortBy(List<Beer> resultBeers, String sortBy) {
-//        if (sortBy != null && !sortBy.isEmpty()) {
-//            switch (sortBy.toLowerCase()) {
-//                case "name":
-//                    resultBeers.sort(Comparator.comparing(Beer::getName));
-//                    break;
-//                case "abv":
-//                    resultBeers.sort(Comparator.comparing(Beer::getAbv));
-//                    break;
-//                case "style":
-//                    resultBeers.sort(Comparator.comparing(beer -> beer.getStyle().getName()));
-//                    break;
-//            }
-//        }
-//
-//        return resultBeers;
-//    }
+        orderByQuery = String.format(" order by %s", orderByQuery);
 
-//    private List<Beer> sortOrderType(List<Beer> resultBeers, String sortOrderType) {
-//        if (sortOrderType != null && !sortOrderType.isEmpty()) {
-//            if (sortOrderType.equalsIgnoreCase("desc")) {
-//                Collections.reverse(resultBeers);
-//            }
-//        }
-//
-//        return resultBeers;
-//    }
+        if (filterOptions.getSortOrderType().isPresent() &&
+                filterOptions.getSortOrderType().get().equalsIgnoreCase("desc")) {
+            orderByQuery = String.format("%s desc", orderByQuery);
+        }
 
-//    private static boolean checkContainsIgnoredCase(String first, String second) {
-//        return first.toLowerCase().contains(second.toLowerCase());
-//    }
+        return orderByQuery;
+    }
 }

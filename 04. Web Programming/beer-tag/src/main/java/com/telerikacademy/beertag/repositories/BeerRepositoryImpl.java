@@ -65,7 +65,6 @@ public class BeerRepositoryImpl implements BeerRepository {
     }
 
 
-
     @Override
     public Beer getBeerById(int id) {
         try (Session session = sessionFactory.openSession()) {

@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.telerikacademy.beer.services.BeerServiceTests" tests="1" skipped="0" failures="0" errors="0" timestamp="2024-10-16T15:57:45" hostname="NIKOLAY-VOYNOV" time="11.103">
+  <properties/>
+  <testcase name="create_Should_CallRepository_When_BeerWithSameNameNotExist()" classname="com.telerikacademy.beer.services.BeerServiceTests" time="11.103"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

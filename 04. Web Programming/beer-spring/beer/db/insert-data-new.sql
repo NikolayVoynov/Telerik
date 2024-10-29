@@ -24,40 +24,6 @@ VALUES (8, 'Special ale');
 
 
 
-
-INSERT INTO beers.beers (beer_id, name, abv, style_id)
-VALUES (1, 'Glarus English Ale', 4.6, 8);
-
-INSERT INTO beers.beers (beer_id, name, abv, style_id)
-VALUES (2, 'Rhombus Porter', 5.0,4);
-
-INSERT INTO beers.beers (beer_id, name, abv, style_id)
-VALUES (3, 'Opasen char', 6.6,6);
-
-INSERT INTO beers.beers (beer_id, name, abv, style_id)
-VALUES (4, 'Ailyak', 6.7,6);
-
-INSERT INTO beers.beers (beer_id, name, abv, style_id)
-VALUES (5, 'Basi Kefa', 6.7, 6);
-
-INSERT INTO beers.beers (beer_id, name, abv, style_id)
-VALUES (6, 'Vitoshko lale', 5.5, 2);
-
-INSERT INTO beers.beers (beer_id, name, abv, style_id)
-VALUES (7, 'Divo Pivo', 4.5, 2);
-
-INSERT INTO beers.beers (beer_id, name, abv, style_id)
-VALUES (8, 'Bloody Muddy', 5.0, 3);
-
-INSERT INTO beers.beers (beer_id, name, abv, style_id)
-VALUES (9, 'Black Head', 5.0, 5);
-
-INSERT INTO beers.beers (beer_id, name, abv, style_id)
-VALUES (10, 'Pilsner Urquell', 4.4, 1);
-
-
-
-
 INSERT INTO beers.users(user_id, username, password, first_name, last_name, email, is_admin)
 VALUES (1,'todor','pass1', 'Todor', 'Andonov', 'todor@telerikacademy.com', true);
 
@@ -66,6 +32,41 @@ VALUES (2,'vladi','pass2', 'Vladi', 'Venkov', 'vladi@telerikacademy.com', false)
 
 INSERT INTO beers.users(user_id, username, password, first_name, last_name, email, is_admin)
 VALUES (3,'pesho','pass3', 'Peter', 'Raykov', 'pesho@telerikacademy.com', false);
+
+
+INSERT INTO beers.beers (beer_id, name, abv, style_id, created_by)
+VALUES (1, 'Glarus English Ale', 4.6, 8, 1);
+
+INSERT INTO beers.beers (beer_id, name, abv, style_id, created_by)
+VALUES (2, 'Rhombus Porter', 5.0,4, 2);
+
+INSERT INTO beers.beers (beer_id, name, abv, style_id, created_by)
+VALUES (3, 'Opasen char', 6.6,6, 3);
+
+INSERT INTO beers.beers (beer_id, name, abv, style_id, created_by)
+VALUES (4, 'Ailyak', 6.7,6, 1);
+
+INSERT INTO beers.beers (beer_id, name, abv, style_id, created_by)
+VALUES (5, 'Basi Kefa', 6.7, 6, 2);
+
+INSERT INTO beers.beers (beer_id, name, abv, style_id, created_by)
+VALUES (6, 'Vitoshko lale', 5.5, 2, 3);
+
+INSERT INTO beers.beers (beer_id, name, abv, style_id, created_by)
+VALUES (7, 'Divo Pivo', 4.5, 2, 1);
+
+INSERT INTO beers.beers (beer_id, name, abv, style_id, created_by)
+VALUES (8, 'Bloody Muddy', 5.0, 3, 2);
+
+INSERT INTO beers.beers (beer_id, name, abv, style_id, created_by)
+VALUES (9, 'Black Head', 5.0, 5, 3);
+
+INSERT INTO beers.beers (beer_id, name, abv, style_id, created_by)
+VALUES (10, 'Pilsner Urquell', 4.4, 1, 1);
+
+
+
+
 
 
 INSERT INTO beers.users_beers(user_id, beer_id, drunk) VALUES (1,1,0);

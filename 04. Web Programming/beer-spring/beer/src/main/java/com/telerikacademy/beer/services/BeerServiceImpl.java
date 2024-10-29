@@ -55,7 +55,8 @@ public class BeerServiceImpl implements BeerService {
 
     @Override
     public void updateBeer(Beer beer, User user) {
-        if (!user.isAdmin()) {
+        Beer beerToUpdate = repository.getBeerById(beer.getId());
+        if (!user.isAdmin() && !beerToUpdate.getCreatedBy().equals(user)) {
             throw new UnauthorizedOperationException("Only admin can modify beer.");
         }
 

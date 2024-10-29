@@ -1,9 +1,8 @@
 package com.telerikacademy.beer.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
-import jakarta.validation.constraints.Size;
 
 
 @Entity
@@ -16,7 +15,6 @@ public class Beer {
     private int id;
 
     @Column(name = "name")
-    @NotNull(message = "Name cannot be empty")
     private String name;
 
     @Column(name = "abv")
@@ -25,6 +23,11 @@ public class Beer {
     @ManyToOne
     @JoinColumn(name = "style_id")
     private Style style;
+
+    @JsonIgnore
+    @ManyToOne
+    @JoinColumn(name = "created_by")
+    private User createdBy;
 
     public Beer() {
     }
@@ -65,5 +68,13 @@ public class Beer {
 
     public void setStyle(Style style) {
         this.style = style;
+    }
+
+    public User getCreatedBy() {
+        return createdBy;
+    }
+
+    public void setCreatedBy(User createdBy) {
+        this.createdBy = createdBy;
     }
 }

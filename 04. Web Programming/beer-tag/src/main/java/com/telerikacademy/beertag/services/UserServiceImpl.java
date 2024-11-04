@@ -1,5 +1,6 @@
 package com.telerikacademy.beertag.services;
 
+import com.telerikacademy.beertag.exceptions.EntityDuplicateException;
 import com.telerikacademy.beertag.exceptions.EntityNotFoundException;
 import com.telerikacademy.beertag.models.Beer;
 import com.telerikacademy.beertag.models.User;
@@ -60,4 +61,23 @@ public class UserServiceImpl implements UserService {
         user.getWishList().removeIf(b -> b.getId() == beerId);
         userRepository.updateUser(user);
     }
+
+    @Override
+    public void createUser(User user) {
+        boolean duplicateExists = true;
+
+        try {
+            userRepository.getUserByName(user.getUsername());
+        } catch (EntityNotFoundException e) {
+            duplicateExists = false;
+        }
+
+        if (duplicateExists) {
+            throw new EntityDuplicateException("User", "username", user.getUsername());
+        }
+
+        userRepository.createUser(user);
+    }
+
+
 }

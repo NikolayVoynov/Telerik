@@ -2,7 +2,6 @@ package com.telerikacademy.beertag.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import org.hibernate.annotations.Fetch;
 
 import java.util.Objects;
 import java.util.Set;

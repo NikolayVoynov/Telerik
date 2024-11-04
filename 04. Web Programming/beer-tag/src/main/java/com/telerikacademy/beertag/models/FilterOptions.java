@@ -11,6 +11,15 @@ public class FilterOptions {
     private Optional<String> sortBy;
     private Optional<String> sortOrderType;
 
+    public FilterOptions() {
+        this.name = Optional.empty();
+        this.minAbv = Optional.empty();
+        this.maxAbv = Optional.empty();
+        this.styleId = Optional.empty();
+        this.sortBy = Optional.empty();
+        this.sortOrderType = Optional.empty();
+    }
+
     public FilterOptions(
             String name,
             Double minAbv,

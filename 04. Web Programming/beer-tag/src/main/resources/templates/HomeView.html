@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{HeadFragment.html::head('Home')}"></head>
+<body>
+<header th:replace="~{HeaderFragment.html::header}"></header>
+<div class="body-content">
+    <h2 th:text="#{home.welcome}">Welcome (design)!</h2>
+        <h2 th:if = "${isAuthenticated}"  th:text="${session.currentUser}"></h2>
+    <img src="../static/images/logo.png" th:src="@{/images/logo.png}" alt="BeerTag logo"/>
+    <p>Your one-stop destination to explore, track, and share your love for craft beers! Whether you're a casual
+        drinker or a true beer enthusiast, Beer Tag is here to enhance your experience. Discover new brews, track your
+        favorites, and connect with fellow beer lovers. Each beer is a journey, and with Beer Tag, you’ll never miss a
+        detail.</p>
+    <p>Cheers to finding your next favorite pint – one tag at a time!</p>
+</div>
+
+<footer th:replace="~{FooterFragment.html::footer}"></footer>
+</body>
+</html>

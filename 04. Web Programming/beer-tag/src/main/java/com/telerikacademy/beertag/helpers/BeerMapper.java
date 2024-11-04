@@ -2,6 +2,7 @@ package com.telerikacademy.beertag.helpers;
 
 import com.telerikacademy.beertag.models.Beer;
 import com.telerikacademy.beertag.models.BeerDto;
+import com.telerikacademy.beertag.models.User;
 import com.telerikacademy.beertag.services.BeerService;
 import com.telerikacademy.beertag.services.StyleService;
 import com.telerikacademy.beertag.services.UserService;
@@ -35,6 +36,15 @@ public class BeerMapper {
         beer.setStyle(styleService.getStyleById(beerDto.getStyleId()));
 
         return beer;
+    }
+
+    public BeerDto beerToDto(Beer beer) {
+        BeerDto beerDto = new BeerDto();
+        beerDto.setName(beer.getName());
+        beerDto.setAbv(beer.getAbv());
+        beerDto.setStyleId(beer.getStyle().getId());
+
+        return beerDto;
     }
 
 }

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{HeadFragment.html::head('About')}"></head>
+<body>
+<header th:replace="~{HeaderFragment.html::header}"></header>
+<div class="body-content">
+    <h2>About Beer Tag</h2>
+
+    <img style="max-width: 150px; margin-bottom: 20px;" th:src="@{/images/logo.png}" alt="Logo"/>
+
+    <p>Welcome to Beer Tag – the ultimate platform for beer lovers to explore, track, and share their beer journey.
+        Whether you're just starting to explore craft brews or you're a seasoned aficionado,
+        Beer Tag is designed to elevate your experience with each sip!</p>
+
+    <h3>Our Mission</h3>
+    <p>At Beer Tag, we’re passionate about connecting people through their love of beer. We believe every beer tells a
+        story – from the rich history of its brewery to the unique flavors and aromas in each glass. Our mission is to
+        make
+        it easy for everyone to record their beer experiences, discover new brews, and join a community of beer
+        enthusiasts
+        who share their excitement.</p>
+
+    <h3>What You Can Do with Beer Tag</h3>
+    <p>Discover New Brews: Access a wide selection of beers, from local microbreweries to international favorites, each
+        with in-depth information and reviews.
+    <p> Track Your Tasting Journey: Keep a personal record of the beers you’ve tried, rate them, and add tasting notes
+        to
+        remember your favorites.</p>
+    <p>Connect with the Community: Follow friends, share recommendations, and engage with beer lovers around the world.
+        Find Beer Events and Breweries: Stay updated on local events, tap takeovers, and new releases, and easily locate
+        breweries near you.</p>
+
+    <h3>Join Us on This Journey</h3>
+    <p>Beer Tag is more than just a tracking tool – it’s a community dedicated to celebrating the art of beer. We’re
+        here
+        to make your beer journey even richer and to help you discover new favorites along the way.</p>
+
+    <p>Cheers to great beers and even better company!</p>
+</div>
+
+<footer th:replace="~{FooterFragment.html::footer}"></footer>
+</body>
+</html>

@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{HeadFragment.html::head('Update Beer')}"></head>
+<body>
+<header th:replace="~{HeaderFragment.html::header}"></header></header>
+<div class="body-content">
+    <div th:replace="~{BeerForm.html :: beer-form('Update Beer')}"></div>
+</div>
+<footer th:replace="~{FooterFragment.html::footer}"></footer>
+</body>
+</html>

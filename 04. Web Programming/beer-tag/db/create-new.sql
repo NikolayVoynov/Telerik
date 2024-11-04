@@ -33,7 +33,7 @@ create table users_beers
 (
     user_id int not null,
     beer_id int not null,
-    drunk   int not null default false,
+    drunk   int not null default 0,
     constraint users_beers_beers_beer_id_fk
         foreign key (beer_id) references beers (beer_id),
     constraint users_beers_users_user_id_fk

@@ -1,6 +1,5 @@
 package com.telerikacademy.beertag.controllers.mvc;
 
-import com.telerikacademy.beertag.exceptions.AuthenticationFailureException;
 import com.telerikacademy.beertag.exceptions.AuthorizationException;
 import com.telerikacademy.beertag.exceptions.EntityDuplicateException;
 import com.telerikacademy.beertag.exceptions.EntityNotFoundException;
@@ -27,22 +26,27 @@ import java.util.List;
 public class BeerMvcController {
 
     private final BeerService beerService;
-    private final UserService userService;
     private final StyleService styleService;
+    private final UserService userService;
     private final BeerMapper mapper;
     private final AuthenticationHelper authenticationHelper;
 
     @Autowired
     public BeerMvcController(BeerService beerService,
-                             UserService userService,
                              StyleService styleService,
+                             UserService userService,
                              BeerMapper mapper,
                              AuthenticationHelper authenticationHelper) {
         this.beerService = beerService;
-        this.userService = userService;
         this.styleService = styleService;
+        this.userService = userService;
         this.mapper = mapper;
         this.authenticationHelper = authenticationHelper;
+    }
+
+    @ModelAttribute("isAuthenticated")
+    public boolean populateIsAuthenticated(HttpSession session) {
+        return session.getAttribute("currentUser") != null;
     }
 
     @ModelAttribute("requestURI")
@@ -65,14 +69,29 @@ public class BeerMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "ErrorView";
+            return "NotFoundView";
         }
     }
 
     @GetMapping()
-    public String showAllBeers(Model model) {
-        model.addAttribute("beers",
-                beerService.getAllBeers(new FilterOptions()));
+    public String showAllBeers(@ModelAttribute("filterOptions") FilterDto filterDto,
+                               Model model,
+                               HttpSession session) {
+        FilterOptions filterOptions = new FilterOptions(
+                filterDto.getName(),
+                filterDto.getMinAbv(),
+                filterDto.getMaxAbv(),
+                filterDto.getStyleId(),
+                filterDto.getSortBy(),
+                filterDto.getSortOrderType());
+
+        if (populateIsAuthenticated(session)) {
+            String currentUsername = (String) session.getAttribute("currentUser");
+            model.addAttribute("currentUser", userService.getUserByName(currentUsername));
+        }
+
+        model.addAttribute("filterOptions", filterDto);
+        model.addAttribute("beers", beerService.getAllBeers(filterOptions));
 
         return "BeersView";
     }
@@ -81,11 +100,11 @@ public class BeerMvcController {
     public String showNewBeerPage(Model model, HttpSession session) {
         try {
             authenticationHelper.tryGetUser(session);
-        } catch (AuthenticationFailureException e) {
+        } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
-        model.addAttribute("beer", new BeerDto());
 
+        model.addAttribute("beer", new BeerDto());
         return "BeerCreateView";
     }
 
@@ -95,20 +114,21 @@ public class BeerMvcController {
                                      HttpSession session) {
         try {
             authenticationHelper.tryGetUser(session);
-        } catch (AuthenticationFailureException e) {
+        } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
 
         try {
             Beer beer = beerService.getBeerById(id);
             BeerDto beerDto = mapper.beerToDto(beer);
+            model.addAttribute("beerId", id);
             model.addAttribute("beer", beerDto);
 
             return "BeerUpdateView";
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "ErrorView";
+            return "NotFoundView";
         }
     }
 
@@ -120,7 +140,7 @@ public class BeerMvcController {
         User user;
         try {
             user = authenticationHelper.tryGetUser(session);
-        } catch (AuthenticationFailureException e) {
+        } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
 
@@ -141,23 +161,23 @@ public class BeerMvcController {
         } catch (EntityNotFoundException e) {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
-            return "ErrorView";
+            return "NotFoundView";
         }
     }
 
     @PostMapping("/{id}/update")
     public String updateBeer(@PathVariable int id, @Valid @ModelAttribute("beer") BeerDto beer,
-                             BindingResult errors,
+                             BindingResult bindingResult,
                              Model model,
                              HttpSession session) {
         User user;
         try {
             user = authenticationHelper.tryGetUser(session);
-        } catch (AuthenticationFailureException e) {
+        } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
 
-        if (errors.hasErrors()) {
+        if (bindingResult.hasErrors()) {
             return "BeerUpdateView";
         }
 
@@ -170,14 +190,14 @@ public class BeerMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
 
-            return "ErrorView";
+            return "NotFoundView";
         } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
 
-            return "ErrorView";
+            return "AccessDeniedView";
         } catch (EntityDuplicateException e) {
-            errors.rejectValue("name", "beer.exists", e.getMessage());
+            bindingResult.rejectValue("name", "beer.exists", e.getMessage());
 
             return "BeerUpdateView";
         }
@@ -190,7 +210,7 @@ public class BeerMvcController {
         User user;
         try {
             user = authenticationHelper.tryGetUser(session);
-        } catch (AuthenticationFailureException e) {
+        } catch (AuthorizationException e) {
             return "redirect:/auth/login";
         }
 
@@ -201,12 +221,12 @@ public class BeerMvcController {
             model.addAttribute("statusCode", HttpStatus.NOT_FOUND.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
 
-            return "ErrorView";
+            return "NotFoundView";
         } catch (AuthorizationException e) {
             model.addAttribute("statusCode", HttpStatus.UNAUTHORIZED.getReasonPhrase());
             model.addAttribute("error", e.getMessage());
 
-            return "ErrorView";
+            return "AccessDeniedView";
         }
     }
 }

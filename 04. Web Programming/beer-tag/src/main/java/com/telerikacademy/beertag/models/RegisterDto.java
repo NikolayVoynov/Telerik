@@ -2,38 +2,21 @@ package com.telerikacademy.beertag.models;
 
 import jakarta.validation.constraints.NotEmpty;
 
-public class RegisterDto {
+public class RegisterDto extends LoginDto {
 
-    @NotEmpty
-    private String username;
-    @NotEmpty
-    private String password;
-    @NotEmpty
+    @NotEmpty(message = "Password confirmation can't be empty.")
     private String passwordConfirmed;
-    @NotEmpty
+
+    @NotEmpty(message = "First name can't be empty.")
     private String firstName;
-    @NotEmpty
+
+    @NotEmpty(message = "Last name can't be empty.")
     private String lastName;
-    @NotEmpty
+
+    @NotEmpty(message = "Email can't be empty.")
     private String email;
 
     public RegisterDto() {
-    }
-
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getPasswordConfirmed() {

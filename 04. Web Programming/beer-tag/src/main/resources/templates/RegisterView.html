@@ -1,49 +1,53 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head th:replace="~{HeadFragment.html::head('Register')}"></head>
+<div th:insert="~{fragments/PageFrame :: head('Register')}"></div>
 <body>
-<header th:replace="~{HeaderFragment.html::header}"></header>
-<div class="body-content">
-    <h2>Register Page</h2>
-    <form action="#" th:action="@{__${requestURI}__}" th:object="${register}" method="post">
-        <label th:text="#{user.label.username}">Username:</label>
-        <br/>
-        <input type="text" th:field="*{username}"/>
-        <label class="error" th:errors="*{username}">Username error placeholder</label>
-        </br>
+<div th:replace="~{fragments/PageFrame :: navbar}"></div>
+<div class="masthead">
+    <div class="container d-flex align-items-center flex-column">
+        <h2>Register</h2>
+        <form action="#" th:action="@{/auth/register}" th:object="${register}" method="post">
+            <label th:text="#{user.label.username}">Username</label>
+            <br/>
+            <input type="text" th:field="*{username}"/>
+            <label class="error" th:errors="*{username}">Username error placeholder</label>
+            <br/><br/>
 
-        <label th:text="#{user.label.password}">Password:</label>
-        <br/>
-        <input type="text" th:field="*{password}"/>
-        <label class="error" th:errors="*{password}">Password error placeholder</label>
-        <br/>
+            <label th:text="#{user.label.password}">Password</label>
+            <br/>
+            <input type="password" th:field="*{password}"/>
+            <label class="error" th:errors="*{password}">Password error placeholder</label>
+            <br/><br/>
 
-        <label th:text="#{user.label.password-confirm}">Confirm Password:</label>
-        <br/>
-        <input type="text" th:field="*{passwordConfirmed}"/>
-        <label class="error" th:errors="*{passwordConfirmed}">Confirm Password error placeholder</label>
-        </br>
+            <label th:text="#{user.label.password-confirm}">Confirm Password</label>
+            <br/>
+            <input type="password" th:field="*{passwordConfirmed}"/>
+            <label class="error" th:errors="*{passwordConfirmed}">Password confirm error placeholder</label>
+            <br/><br/>
 
-        <label th:text="#{user.label.first-name}">First Name:</label>
-        <br/>
-        <input type="text" th:field="*{firstName}"/>
-        <label class="error" th:errors="*{firstName}">First Name error placeholder</label>
-        </br>
+            <label th:text="#{user.label.first-name}">First Name</label>
+            <br/>
+            <input type="text" th:field="*{firstName}"/>
+            <label class="error" th:errors="*{firstName}">First name error placeholder</label>
+            <br/><br/>
 
-        <label th:text="#{user.label.last-name}">Last Name:</label>
-        <br/>
-        <input type="text" th:field="*{lastName}"/>
-        <label class="error" th:errors="*{lastName}">Last Name error placeholder</label>
-        </br>
+            <label th:text="#{user.label.last-name}">Last Name</label>
+            <br/>
+            <input type="text" th:field="*{lastName}"/>
+            <label class="error" th:errors="*{lastName}">Last name error placeholder</label>
+            <br/><br/>
 
-        <label th:text="#{user.label.email}">Email:</label>
-        <br/>
-        <input type="text" th:field="*{email}"/>
-        <label class="error" th:errors="*{email}">Email error placeholder</label>
-        </br></br>
-        <input type="submit" value="Register"/>
-    </form>
+            <label th:text="#{user.label.email}">Email</label>
+            <br/>
+            <input type="text" th:field="*{email}"/>
+            <label class="error" th:errors="*{email}">Email error placeholder</label>
+            <br/><br/>
+
+            <input type="submit" value="Register"/>
+        </form>
+    </div>
 </div>
-<footer th:replace="~{FooterFragment.html::footer}"></footer>
+<div th:replace="~{fragments/PageFrame :: footer}"></div>
+<div th:replace="~{fragments/PageFrame :: scripts}"></div>
 </body>
 </html>

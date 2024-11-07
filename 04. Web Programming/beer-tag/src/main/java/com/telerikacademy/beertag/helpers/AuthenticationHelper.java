@@ -1,6 +1,5 @@
 package com.telerikacademy.beertag.helpers;
 
-import com.telerikacademy.beertag.exceptions.AuthenticationFailureException;
 import com.telerikacademy.beertag.exceptions.AuthorizationException;
 import com.telerikacademy.beertag.exceptions.EntityNotFoundException;
 import com.telerikacademy.beertag.models.User;
@@ -51,10 +50,10 @@ public class AuthenticationHelper {
     }
 
     public User tryGetUser(HttpSession session) {
-        String currentUser = session.getAttribute("currentUser").toString();
+        String currentUser = (String) session.getAttribute("currentUser");
 
         if (currentUser == null) {
-            throw new AuthenticationFailureException(NO_USER_LOGGED_IN_ERROR_MESSAGE);
+            throw new AuthorizationException(NO_USER_LOGGED_IN_ERROR_MESSAGE);
         }
 
         return userService.getUserByName(currentUser);
@@ -65,12 +64,12 @@ public class AuthenticationHelper {
             User user = userService.getUserByName(username);
 
             if (!user.getPassword().equals(password)) {
-                throw new AuthenticationFailureException(AUTHENTICATION_FAILURE_MESSAGE);
+                throw new AuthorizationException(AUTHENTICATION_FAILURE_MESSAGE);
             }
 
             return user;
         } catch (EntityNotFoundException e){
-            throw new AuthenticationFailureException(AUTHENTICATION_FAILURE_MESSAGE);
+            throw new AuthorizationException(AUTHENTICATION_FAILURE_MESSAGE);
         }
     }
 }
